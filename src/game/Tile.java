@@ -1,6 +1,12 @@
 package game;
 
-import javax.swing.BorderFactory;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.geom.RoundRectangle2D;
+
 import javax.swing.JButton;
 
 import ui.Theme;
@@ -11,42 +17,69 @@ public class Tile extends JButton {
     public boolean isRemoved = false;
     private boolean isBorder = false;
 
+    private boolean isSelected = false;
+
     public Tile(int id, int row, int col) {
         this.id = id;
         this.row = row;
         this.col = col;
-        setupVisual();
-    }
 
-    private void setupVisual() {
-        // AKTIFKAN LAGI TEKS ANGKA
         setText(String.valueOf(id));
-        setFont(Theme.TILE_FONT); // Pastikan font besar dan jelas
+        setFont(Theme.TILE_FONT);
+        setForeground(Theme.TEXT_WHITE);
 
-        setBackground(Theme.TILE_BG);
-        setForeground(Theme.TEXT_WHITE); // Warna angka putih
         setFocusPainted(false);
-
-        // Border standar
-        setBorder(BorderFactory.createLineBorder(Theme.BG_COLOR, 2));
+        setBorderPainted(false);
+        setContentAreaFilled(false);
     }
 
-    // Method ini tidak dipakai dulu di mode angka
-    // Tapi kita biarkan kosong agar tidak error jika dipanggil Board lama
-    public void setTileImage(javax.swing.ImageIcon icon) {
-        // Do nothing for text mode
+    @Override
+    protected void paintComponent(Graphics g) {
+        if (isRemoved)
+            return;
+
+        Graphics2D g2 = (Graphics2D) g.create();
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        if (isSelected) {
+            g2.setColor(Color.ORANGE);
+        } else if (getModel().isRollover()) {
+            g2.setColor(Theme.TILE_HOVER);
+        } else {
+            g2.setColor(Theme.TILE_BG);
+        }
+
+        g2.fill(new RoundRectangle2D.Float(2, 2, getWidth() - 4, getHeight() - 4, 15, 15));
+
+        if (isSelected) {
+            g2.setColor(Color.WHITE);
+            g2.setStroke(new BasicStroke(3));
+            g2.draw(new RoundRectangle2D.Float(2, 2, getWidth() - 4, getHeight() - 4, 15, 15));
+        }
+
+        g2.dispose();
+        super.paintComponent(g);
     }
 
-    // Hapus Override paintComponent agar kembali ke tombol standar Java Swing
-    // (Button akan digambar secara default dengan background dan text)
+    // METHOD BARU: Untuk mengatur status seleksi dari GamePanel
+    public void setSelected(boolean selected) {
+        this.isSelected = selected;
+
+        // Ubah warna text agar kontras jika background orange
+        if (selected) {
+            setForeground(Color.BLACK);
+        } else {
+            setForeground(Theme.TEXT_WHITE);
+        }
+
+        repaint(); // Gambar ulang tile
+    }
 
     public void markAsRemoved() {
         this.isRemoved = true;
-        setOpaque(false);
-        setContentAreaFilled(false);
-        setBorderPainted(false);
-        setText(""); // Hapus angkanya saat hilang
+        setText("");
         setEnabled(false);
+        repaint();
     }
 
     public void setAsBorder() {
@@ -55,24 +88,19 @@ public class Tile extends JButton {
         markAsRemoved();
     }
 
+    public void setID(int newID) {
+        this.id = newID;
+        setText(String.valueOf(newID));
+    }
+
     public void reset() {
         if (isBorder)
             return;
         this.isRemoved = false;
-        setOpaque(true);
-        setContentAreaFilled(true);
-        setBorderPainted(true);
-
-        setText(String.valueOf(id)); // Tampilkan angka lagi saat reset
-        setBackground(Theme.TILE_BG);
+        this.isSelected = false; // Reset seleksi juga
+        setText(String.valueOf(id));
+        setForeground(Theme.TEXT_WHITE);
         setEnabled(true);
         repaint();
-    }
-
-    // Method baru untuk mengubah ID saat Shuffle
-    public void setID(int newID) {
-        this.id = newID;
-        setText(String.valueOf(newID)); // Update tampilan angka
-        // Jika nanti pakai gambar, update gambar di sini juga
     }
 }

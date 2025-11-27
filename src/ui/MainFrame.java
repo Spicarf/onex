@@ -19,6 +19,9 @@ public class MainFrame extends JFrame {
     private LeaderboardPanel leaderboardPanel;
     private HistoryPanel historyPanel;
 
+    // PANEL BARU
+    private GameOverPanel gameOverPanel;
+
     private int currentUserId;
     private String currentUsername;
 
@@ -34,20 +37,26 @@ public class MainFrame extends JFrame {
         loginPanel = new LoginPanel(this);
         registerPanel = new RegisterPanel(this);
         mainMenuPanel = new MainMenuPanel(this);
-        levelSelectionPanel = new LevelSelectionPanel(this); // Init
+        levelSelectionPanel = new LevelSelectionPanel(this);
         gamePanel = new GamePanel(this);
-        pausePanel = new PausePanel(this); // Init
+        pausePanel = new PausePanel(this);
         leaderboardPanel = new LeaderboardPanel(this);
         historyPanel = new HistoryPanel(this);
+
+        // Inisialisasi Panel Game Over
+        gameOverPanel = new GameOverPanel(this);
 
         container.add(loginPanel, "LOGIN");
         container.add(registerPanel, "REGISTER");
         container.add(mainMenuPanel, "MENU");
-        container.add(levelSelectionPanel, "LEVEL_SELECT"); // Add
+        container.add(levelSelectionPanel, "LEVEL_SELECT");
         container.add(gamePanel, "GAME");
-        container.add(pausePanel, "PAUSE"); // Add
+        container.add(pausePanel, "PAUSE");
         container.add(leaderboardPanel, "LEADERBOARD");
         container.add(historyPanel, "HISTORY");
+
+        // Daftarkan ke CardLayout
+        container.add(gameOverPanel, "GAMEOVER");
 
         add(container);
         showPanel("LOGIN");
@@ -77,6 +86,12 @@ public class MainFrame extends JFrame {
 
     public void stopGameAndReturnToMenu() {
         gamePanel.stopGame(game.GameEndType.USER_QUIT);
+    }
+
+    // METHOD BARU: Untuk menampilkan layar Game Over
+    public void showGameOverScreen(boolean isWin, int score, int duration, String difficulty) {
+        gameOverPanel.setResults(isWin, score, duration, difficulty);
+        cardLayout.show(container, "GAMEOVER");
     }
 
     public void onLoginSuccess(int id, String username) {
