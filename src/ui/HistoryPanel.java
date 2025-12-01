@@ -37,33 +37,28 @@ public class HistoryPanel extends JPanel {
         setBackground(Theme.BG_COLOR);
         setBorder(new EmptyBorder(20, 40, 20, 40)); // Padding pinggir
 
-        // --- JUDUL ---
         JLabel title = new JLabel("MY HISTORY", SwingConstants.CENTER);
         title.setFont(new Font("Segoe UI", Font.BOLD, 36));
         title.setForeground(Theme.PRIMARY_COLOR);
         title.setBorder(new EmptyBorder(0, 0, 20, 0)); // Jarak ke tabel
         add(title, BorderLayout.NORTH);
 
-        // --- TABEL MODERN ---
-        // Kolom: Score, Duration, Date
         model = new DefaultTableModel(new String[] { "Score", "Duration", "Date" }, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // Tidak bisa diedit
+                return false;
             }
         };
 
         tableHistory = new JTable(model);
-        styleTable(tableHistory); // Styling modern
+        styleTable(tableHistory);
 
-        // ScrollPane
         JScrollPane scrollPane = new JScrollPane(tableHistory);
         scrollPane.getViewport().setBackground(Theme.BG_COLOR);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         scrollPane.setBackground(Theme.BG_COLOR);
         add(scrollPane, BorderLayout.CENTER);
 
-        // --- TOMBOL KEMBALI ---
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.setBackground(Theme.BG_COLOR);
         buttonPanel.setBorder(new EmptyBorder(20, 0, 0, 0));
@@ -75,9 +70,7 @@ public class HistoryPanel extends JPanel {
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
-    // --- HELPER: STYLING TABEL ---
     private void styleTable(JTable table) {
-        // Body Tabel
         table.setBackground(Theme.PANEL_COLOR);
         table.setForeground(Theme.TEXT_WHITE);
         table.setFont(Theme.NORMAL_FONT);
@@ -86,7 +79,6 @@ public class HistoryPanel extends JPanel {
         table.setIntercellSpacing(new Dimension(0, 0));
         table.setFillsViewportHeight(true);
 
-        // Header Tabel
         JTableHeader header = table.getTableHeader();
         header.setBackground(Theme.TILE_BG);
         header.setForeground(Color.WHITE);
@@ -94,7 +86,6 @@ public class HistoryPanel extends JPanel {
         header.setBorder(BorderFactory.createEmptyBorder());
         header.setPreferredSize(new Dimension(0, 40));
 
-        // Rata Tengah
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
         centerRenderer.setBackground(Theme.PANEL_COLOR);
@@ -105,7 +96,6 @@ public class HistoryPanel extends JPanel {
         }
     }
 
-    // --- HELPER: TOMBOL MODERN ---
     private JButton createModernButton(String text, Color baseColor) {
         JButton btn = new JButton(text) {
             @Override

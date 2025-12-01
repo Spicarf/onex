@@ -37,7 +37,6 @@ public class GameOverPanel extends JPanel {
         gbc.gridx = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // 1. JUDUL (GAME OVER / YOU WIN)
         titleLabel = new JLabel("GAME OVER", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 48));
         titleLabel.setForeground(Theme.ACCENT_COLOR);
@@ -45,7 +44,6 @@ public class GameOverPanel extends JPanel {
         gbc.insets = new Insets(0, 0, 30, 0);
         add(titleLabel, gbc);
 
-        // 2. SKOR
         scoreLabel = new JLabel("Score: 0", SwingConstants.CENTER);
         scoreLabel.setFont(Theme.HEADER_FONT);
         scoreLabel.setForeground(Theme.TEXT_WHITE);
@@ -53,14 +51,12 @@ public class GameOverPanel extends JPanel {
         gbc.insets = new Insets(5, 0, 5, 0);
         add(scoreLabel, gbc);
 
-        // 3. WAKTU
         timeLabel = new JLabel("Time: 0s", SwingConstants.CENTER);
         timeLabel.setFont(Theme.SUBHEADER_FONT);
         timeLabel.setForeground(Theme.TEXT_GRAY);
         gbc.gridy = 2;
         add(timeLabel, gbc);
 
-        // 4. INFO TAMBAHAN (Difficulty)
         infoLabel = new JLabel("Difficulty: Easy", SwingConstants.CENTER);
         infoLabel.setFont(Theme.NORMAL_FONT);
         infoLabel.setForeground(Theme.TEXT_GRAY);
@@ -68,7 +64,6 @@ public class GameOverPanel extends JPanel {
         gbc.insets = new Insets(0, 0, 40, 0);
         add(infoLabel, gbc);
 
-        // 5. TOMBOL MENU
         JButton btnMenu = createModernButton("BACK TO MENU", Theme.SECONDARY_COLOR);
         btnMenu.addActionListener(e -> mainApp.showPanel("MENU"));
         gbc.gridy = 4;
@@ -76,14 +71,13 @@ public class GameOverPanel extends JPanel {
         add(btnMenu, gbc);
     }
 
-    // Method untuk menerima data hasil permainan dari GamePanel
     public void setResults(boolean isWin, int score, int duration, String difficulty) {
         if (isWin) {
             titleLabel.setText("YOU WIN!");
-            titleLabel.setForeground(Theme.PRIMARY_COLOR); // Biru jika menang
+            titleLabel.setForeground(Theme.PRIMARY_COLOR);
         } else {
             titleLabel.setText("GAME OVER");
-            titleLabel.setForeground(Theme.ACCENT_COLOR); // Merah jika kalah
+            titleLabel.setForeground(Theme.ACCENT_COLOR);
         }
 
         scoreLabel.setText("Final Score: " + score);
@@ -91,7 +85,6 @@ public class GameOverPanel extends JPanel {
         infoLabel.setText("Difficulty: " + difficulty);
     }
 
-    // Helper Tombol Modern
     private JButton createModernButton(String text, Color baseColor) {
         JButton btn = new JButton(text) {
             @Override

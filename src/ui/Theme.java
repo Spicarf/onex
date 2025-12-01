@@ -31,13 +31,12 @@ public class Theme {
     public static final Font NORMAL_FONT = new Font("Segoe UI", Font.PLAIN, 14);
     public static final Font TILE_FONT = new Font("Segoe UI", Font.BOLD, 22);
 
-    // --- MANAJEMEN GAMBAR ---
-    public static String currentThemeName = "Numbers"; // Default ke Numbers
+    public static String currentThemeName = "Numbers";
     private static Map<String, ImageIcon> imageCache = new HashMap<>();
 
     public static String[] getAvailableThemes() {
         List<String> list = new ArrayList<>();
-        list.add("Numbers"); // Tambahkan opsi Default paling atas
+        list.add("Numbers");
 
         File themesDir = new File("resources/themes");
         if (themesDir.exists() && themesDir.isDirectory()) {
@@ -58,7 +57,6 @@ public class Theme {
     }
 
     public static ImageIcon getTileImage(int id) {
-        // Jika tema yang dipilih adalah "Numbers", jangan load gambar (return null)
         if ("Numbers".equalsIgnoreCase(currentThemeName)) {
             return null;
         }
@@ -67,19 +65,20 @@ public class Theme {
         if (imageCache.containsKey(key)) {
             return imageCache.get(key);
         }
+
         try {
-            // Cek PNG dan JPG
             String path = "resources/themes/" + currentThemeName + "/" + id + ".png";
             File imgFile = new File(path);
+
             if (!imgFile.exists()) {
                 path = "resources/themes/" + currentThemeName + "/" + id + ".jpg";
                 imgFile = new File(path);
             }
+
             if (imgFile.exists()) {
-                // Load gambar original
                 ImageIcon original = new ImageIcon(path);
-                // Resize agar pas di tombol (misal 40x40)
-                java.awt.Image img = original.getImage().getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH);
+
+                java.awt.Image img = original.getImage().getScaledInstance(80, 80, java.awt.Image.SCALE_SMOOTH);
                 ImageIcon resized = new ImageIcon(img);
 
                 imageCache.put(key, resized);

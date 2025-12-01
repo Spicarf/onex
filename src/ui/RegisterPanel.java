@@ -30,13 +30,12 @@ public class RegisterPanel extends JPanel {
 
     public RegisterPanel(MainFrame mainApp) {
         this.mainApp = mainApp;
-        setLayout(new GridBagLayout()); // Center Alignment
+        setLayout(new GridBagLayout());
         setBackground(Theme.BG_COLOR);
         setupUI();
     }
 
     private void setupUI() {
-        // --- KARTU TENGAH (PANEL KOTAK) ---
         JPanel cardPanel = new JPanel(new GridBagLayout()) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -54,14 +53,12 @@ public class RegisterPanel extends JPanel {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0;
 
-        // JUDUL
         JLabel title = new JLabel("REGISTER", SwingConstants.CENTER);
         title.setFont(Theme.HEADER_FONT);
         title.setForeground(Color.WHITE);
         gbc.gridy = 0;
         cardPanel.add(title, gbc);
 
-        // --- INPUT USERNAME ---
         gbc.gridy = 1;
         cardPanel.add(createLabel("Username"), gbc);
 
@@ -69,7 +66,6 @@ public class RegisterPanel extends JPanel {
         gbc.gridy = 2;
         cardPanel.add(usernameField, gbc);
 
-        // --- INPUT PASSWORD ---
         gbc.gridy = 3;
         cardPanel.add(createLabel("Password"), gbc);
 
@@ -77,7 +73,6 @@ public class RegisterPanel extends JPanel {
         gbc.gridy = 4;
         cardPanel.add(passwordField, gbc);
 
-        // --- INPUT CONFIRM PASSWORD ---
         gbc.gridy = 5;
         cardPanel.add(createLabel("Confirm Password"), gbc);
 
@@ -85,14 +80,12 @@ public class RegisterPanel extends JPanel {
         gbc.gridy = 6;
         cardPanel.add(confirmField, gbc);
 
-        // --- TOMBOL DAFTAR ---
         gbc.gridy = 7;
         gbc.insets = new Insets(30, 0, 10, 0); // Jarak lebih jauh ke atas
         JButton btnReg = createModernButton("CREATE ACCOUNT", Theme.PRIMARY_COLOR);
         btnReg.addActionListener(e -> processRegister());
         cardPanel.add(btnReg, gbc);
 
-        // --- TOMBOL KEMBALI ---
         gbc.gridy = 8;
         gbc.insets = new Insets(0, 0, 0, 0);
         JButton btnBack = createModernButton("BACK TO LOGIN", Theme.SECONDARY_COLOR);
@@ -101,8 +94,6 @@ public class RegisterPanel extends JPanel {
 
         add(cardPanel);
     }
-
-    // --- HELPER METHODS (Sama seperti LoginPanel) ---
 
     private JLabel createLabel(String text) {
         JLabel lbl = new JLabel(text);
@@ -172,8 +163,6 @@ public class RegisterPanel extends JPanel {
         btn.setPreferredSize(new Dimension(250, 45));
         return btn;
     }
-
-    // --- LOGIC LAMA ---
 
     private void processRegister() {
         String user = usernameField.getText();

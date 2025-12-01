@@ -35,7 +35,6 @@ public class LoginPanel extends JPanel {
     }
 
     private void setupUI() {
-        // --- KARTU TENGAH ---
         JPanel cardPanel = new JPanel(new GridBagLayout()) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -53,14 +52,12 @@ public class LoginPanel extends JPanel {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0;
 
-        // JUDUL
         JLabel title = new JLabel("LOGIN", SwingConstants.CENTER);
         title.setFont(Theme.HEADER_FONT);
         title.setForeground(Color.WHITE);
         gbc.gridy = 0;
         cardPanel.add(title, gbc);
 
-        // INPUTS
         gbc.gridy = 1;
         cardPanel.add(createLabel("Username"), gbc);
 
@@ -75,7 +72,6 @@ public class LoginPanel extends JPanel {
         gbc.gridy = 4;
         cardPanel.add(passwordField, gbc);
 
-        // TOMBOL
         gbc.gridy = 5;
         gbc.insets = new Insets(30, 0, 10, 0);
 
@@ -99,14 +95,13 @@ public class LoginPanel extends JPanel {
         return lbl;
     }
 
-    // --- HELPER: TEXT FIELD MODERN ---
     private JTextField createModernTextField() {
         JTextField field = new JTextField(15) {
             @Override
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(Theme.BG_COLOR); // Background input lebih gelap
+                g2.setColor(Theme.BG_COLOR);
                 g2.fill(new RoundRectangle2D.Float(0, 0, getWidth(), getHeight(), 15, 15));
                 g2.dispose();
                 super.paintComponent(g);
@@ -120,7 +115,6 @@ public class LoginPanel extends JPanel {
         return field;
     }
 
-    // --- HELPER: PASSWORD FIELD MODERN ---
     private JPasswordField createModernPasswordField() {
         JPasswordField field = new JPasswordField(15) {
             @Override
@@ -141,7 +135,6 @@ public class LoginPanel extends JPanel {
         return field;
     }
 
-    // --- HELPER: BUTTON MODERN ---
     private JButton createModernButton(String text, Color baseColor) {
         JButton btn = new JButton(text) {
             @Override
@@ -164,7 +157,6 @@ public class LoginPanel extends JPanel {
         return btn;
     }
 
-    // --- LOGIC LAMA ---
     private void processLogin() {
         String user = usernameField.getText();
         String pass = new String(passwordField.getPassword());

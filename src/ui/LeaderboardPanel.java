@@ -1,15 +1,30 @@
 package ui;
 
-import db.DatabaseManager;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.geom.RoundRectangle2D;
+import java.util.List;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
-import java.awt.*;
-import java.awt.geom.RoundRectangle2D;
-import java.util.List;
+
+import db.DatabaseManager;
 
 public class LeaderboardPanel extends JPanel {
     private MainFrame mainApp;
@@ -20,35 +35,30 @@ public class LeaderboardPanel extends JPanel {
         this.mainApp = mainApp;
         setLayout(new BorderLayout());
         setBackground(Theme.BG_COLOR);
-        setBorder(new EmptyBorder(20, 40, 20, 40)); // Padding pinggir agar tidak mepet
+        setBorder(new EmptyBorder(20, 40, 20, 40));
 
-        // --- JUDUL ---
         JLabel title = new JLabel("TOP 10 PLAYERS", SwingConstants.CENTER);
         title.setFont(new Font("Segoe UI", Font.BOLD, 36));
         title.setForeground(Theme.PRIMARY_COLOR);
         title.setBorder(new EmptyBorder(0, 0, 20, 0)); // Jarak ke tabel
         add(title, BorderLayout.NORTH);
 
-        // --- TABEL MODERN ---
-        // Kolom: Username, Score, Duration
         model = new DefaultTableModel(new String[] { "Username", "Score", "Duration" }, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // Agar tidak bisa diedit user
+                return false;
             }
         };
 
         tableLeaderboard = new JTable(model);
-        styleTable(tableLeaderboard); // Panggil helper styling
+        styleTable(tableLeaderboard);
 
-        // ScrollPane (Wadah Tabel)
         JScrollPane scrollPane = new JScrollPane(tableLeaderboard);
-        scrollPane.getViewport().setBackground(Theme.BG_COLOR); // Samakan background
-        scrollPane.setBorder(BorderFactory.createEmptyBorder()); // Hilangkan border garis
+        scrollPane.getViewport().setBackground(Theme.BG_COLOR);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
         scrollPane.setBackground(Theme.BG_COLOR);
         add(scrollPane, BorderLayout.CENTER);
 
-        // --- TOMBOL KEMBALI ---
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.setBackground(Theme.BG_COLOR);
         buttonPanel.setBorder(new EmptyBorder(20, 0, 0, 0));
@@ -60,29 +70,25 @@ public class LeaderboardPanel extends JPanel {
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
-    // --- HELPER: STYLING TABEL ---
     private void styleTable(JTable table) {
-        // Warna & Font Body
         table.setBackground(Theme.PANEL_COLOR);
         table.setForeground(Theme.TEXT_WHITE);
         table.setFont(Theme.NORMAL_FONT);
-        table.setRowHeight(35); // Baris lebih tinggi biar lega
-        table.setShowGrid(false); // Hilangkan garis grid kotak-kotak
+        table.setRowHeight(35);
+        table.setShowGrid(false);
         table.setIntercellSpacing(new Dimension(0, 0));
         table.setFillsViewportHeight(true);
 
-        // Warna & Font Header
         JTableHeader header = table.getTableHeader();
-        header.setBackground(Theme.TILE_BG); // Warna Header
+        header.setBackground(Theme.TILE_BG);
         header.setForeground(Color.WHITE);
         header.setFont(Theme.SUBHEADER_FONT);
         header.setBorder(BorderFactory.createEmptyBorder());
-        header.setPreferredSize(new Dimension(0, 40)); // Tinggi Header
+        header.setPreferredSize(new Dimension(0, 40));
 
-        // Rata Tengah (Center Alignment) untuk isi tabel
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        centerRenderer.setBackground(Theme.PANEL_COLOR); // Pastikan background renderer pas
+        centerRenderer.setBackground(Theme.PANEL_COLOR);
         centerRenderer.setForeground(Theme.TEXT_WHITE);
 
         for (int i = 0; i < table.getColumnCount(); i++) {
@@ -90,7 +96,6 @@ public class LeaderboardPanel extends JPanel {
         }
     }
 
-    // --- HELPER: TOMBOL MODERN ---
     private JButton createModernButton(String text, Color baseColor) {
         JButton btn = new JButton(text) {
             @Override
@@ -98,7 +103,6 @@ public class LeaderboardPanel extends JPanel {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-                // Efek Hover
                 if (getModel().isRollover()) {
                     g2.setColor(baseColor.brighter());
                 } else {
@@ -122,7 +126,7 @@ public class LeaderboardPanel extends JPanel {
     }
 
     public void onPanelShown() {
-        model.setRowCount(0); // Reset tabel
+        model.setRowCount(0);
         List<Object[]> data = DatabaseManager.getLeaderboard();
         for (Object[] row : data) {
             model.addRow(row);

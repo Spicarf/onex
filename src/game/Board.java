@@ -47,16 +47,7 @@ public class Board {
                 if (isBorder) {
                     t.setAsBorder();
                 } else {
-                    // LOGIKA HYBRID: Cek Gambar atau Angka
-                    ImageIcon icon = Theme.getTileImage(currentId);
-
-                    if (icon != null) {
-                        t.setIcon(icon); // Pasang Gambar
-                        t.setText(""); // Sembunyikan Angka
-                    } else {
-                        t.setIcon(null); // Hapus Gambar
-                        t.setText(String.valueOf(currentId)); // Tampilkan Angka
-                    }
+                    applyThemeToTile(t, currentId);
                 }
 
                 tiles[r][c] = t;
@@ -64,7 +55,19 @@ public class Board {
         }
     }
 
-    // Logika Shuffle juga harus support Hybrid
+    private void applyThemeToTile(Tile t, int id) {
+        ImageIcon icon = Theme.getTileImage(id);
+
+        if (icon != null) {
+            t.setIcon(icon);
+            t.setText("");
+        } else {
+            t.setIcon(null);
+            t.setText(String.valueOf(id));
+            t.setForeground(Theme.TEXT_WHITE);
+        }
+    }
+
     public void shuffleRemainingTiles() {
         ArrayList<Integer> remainingIds = new ArrayList<>();
         ArrayList<Tile> activeTiles = new ArrayList<>();
@@ -85,17 +88,8 @@ public class Board {
             int newId = remainingIds.get(i);
             Tile t = activeTiles.get(i);
 
-            // Update Data & Tampilan
             t.id = newId;
-            ImageIcon icon = Theme.getTileImage(newId);
-
-            if (icon != null) {
-                t.setIcon(icon);
-                t.setText("");
-            } else {
-                t.setIcon(null);
-                t.setText(String.valueOf(newId));
-            }
+            applyThemeToTile(t, newId);
         }
     }
 

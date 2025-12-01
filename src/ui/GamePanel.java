@@ -387,7 +387,6 @@ public class GamePanel extends JPanel {
             return;
         }
 
-        // --- UPDATE LOGIKA FINISH ---
         boolean isWin = (type == GameEndType.BOARD_CLEAR);
 
         if (isWin)
@@ -401,11 +400,9 @@ public class GamePanel extends JPanel {
 
         DatabaseManager.saveScore(mainApp.getCurrentUserId(), score, durationPlayed, diffName);
 
-        // Panggil Layar Game Over (Bukan JOptionPane)
         mainApp.showGameOverScreen(isWin, score, durationPlayed, diffName);
     }
 
-    // --- AUDIO INTERNAL ---
     private void playSound(String filename) {
         new Thread(() -> {
             try {
@@ -437,7 +434,7 @@ public class GamePanel extends JPanel {
                     return;
                 bgmClip = AudioSystem.getClip(null);
                 bgmClip.open(audioIn);
-                setVolume(bgmClip, -25.0f);
+                setVolume(bgmClip, -10.0f);
                 bgmClip.loop(Clip.LOOP_CONTINUOUSLY);
                 bgmClip.start();
             } catch (Exception e) {

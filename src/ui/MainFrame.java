@@ -18,8 +18,6 @@ public class MainFrame extends JFrame {
     private PausePanel pausePanel;
     private LeaderboardPanel leaderboardPanel;
     private HistoryPanel historyPanel;
-
-    // PANEL BARU
     private GameOverPanel gameOverPanel;
 
     private int currentUserId;
@@ -42,8 +40,6 @@ public class MainFrame extends JFrame {
         pausePanel = new PausePanel(this);
         leaderboardPanel = new LeaderboardPanel(this);
         historyPanel = new HistoryPanel(this);
-
-        // Inisialisasi Panel Game Over
         gameOverPanel = new GameOverPanel(this);
 
         container.add(loginPanel, "LOGIN");
@@ -54,8 +50,6 @@ public class MainFrame extends JFrame {
         container.add(pausePanel, "PAUSE");
         container.add(leaderboardPanel, "LEADERBOARD");
         container.add(historyPanel, "HISTORY");
-
-        // Daftarkan ke CardLayout
         container.add(gameOverPanel, "GAMEOVER");
 
         add(container);
@@ -88,7 +82,6 @@ public class MainFrame extends JFrame {
         gamePanel.stopGame(game.GameEndType.USER_QUIT);
     }
 
-    // METHOD BARU: Untuk menampilkan layar Game Over
     public void showGameOverScreen(boolean isWin, int score, int duration, String difficulty) {
         gameOverPanel.setResults(isWin, score, duration, difficulty);
         cardLayout.show(container, "GAMEOVER");

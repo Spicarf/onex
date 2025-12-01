@@ -29,11 +29,10 @@ public class LevelSelectionPanel extends JPanel {
 
     private void setupUI() {
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 0, 10, 0); // Jarak vertikal antar elemen
+        gbc.insets = new Insets(10, 0, 10, 0);
         gbc.gridx = 0;
-        gbc.fill = GridBagConstraints.NONE; // Biarkan ukuran tombol fix sesuai preferensi
+        gbc.fill = GridBagConstraints.NONE;
 
-        // --- JUDUL ---
         JLabel title = new JLabel("SELECT DIFFICULTY", SwingConstants.CENTER);
         title.setFont(new Font("Segoe UI", Font.BOLD, 36)); // Font Besar
         title.setForeground(Theme.TEXT_WHITE);
@@ -41,37 +40,30 @@ public class LevelSelectionPanel extends JPanel {
         gbc.insets = new Insets(0, 0, 30, 0); // Jarak agak jauh ke tombol pertama
         add(title, gbc);
 
-        // Reset Insets untuk tombol
         gbc.insets = new Insets(10, 0, 10, 0);
 
-        // --- TOMBOL EASY (Warna Utama/Biru) ---
         gbc.gridy = 1;
         JButton btnEasy = createModernButton("EASY (4x6)", Theme.PRIMARY_COLOR);
         btnEasy.addActionListener(e -> mainApp.startGame(1));
         add(btnEasy, gbc);
 
-        // --- TOMBOL MEDIUM (Warna Tile/Abu-Biru) ---
         gbc.gridy = 2;
-        // Kita gunakan warna Tile Hover agar sedikit berbeda tapi tetap harmoni
         JButton btnMedium = createModernButton("MEDIUM (6x8)", Theme.TILE_HOVER);
         btnMedium.addActionListener(e -> mainApp.startGame(2));
         add(btnMedium, gbc);
 
-        // --- TOMBOL HARD (Warna Aksen/Merah) ---
         gbc.gridy = 3;
         JButton btnHard = createModernButton("HARD (8x12)", Theme.ACCENT_COLOR);
         btnHard.addActionListener(e -> mainApp.startGame(3));
         add(btnHard, gbc);
 
-        // --- TOMBOL BACK (Warna Sekunder/Abu Gelap) ---
         gbc.gridy = 4;
-        gbc.insets = new Insets(30, 0, 0, 0); // Jarak agak jauh dari tombol level
+        gbc.insets = new Insets(30, 0, 0, 0);
         JButton btnBack = createModernButton("BACK TO MENU", Theme.SECONDARY_COLOR);
         btnBack.addActionListener(e -> mainApp.showPanel("MENU"));
         add(btnBack, gbc);
     }
 
-    // --- HELPER: MEMBUAT TOMBOL MODERN ---
     private JButton createModernButton(String text, Color baseColor) {
         JButton btn = new JButton(text) {
             @Override
@@ -86,7 +78,6 @@ public class LevelSelectionPanel extends JPanel {
                     g2.setColor(baseColor);
                 }
 
-                // Gambar Rounded Rect
                 g2.fill(new RoundRectangle2D.Float(0, 0, getWidth(), getHeight(), 20, 20));
                 g2.dispose();
 
@@ -100,7 +91,7 @@ public class LevelSelectionPanel extends JPanel {
         btn.setContentAreaFilled(false);
         btn.setBorderPainted(false);
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btn.setPreferredSize(new Dimension(280, 55)); // Ukuran tombol konsisten
+        btn.setPreferredSize(new Dimension(280, 55));
         return btn;
     }
 }

@@ -26,7 +26,7 @@ public class MainMenuPanel extends JPanel {
 
     public MainMenuPanel(MainFrame mainApp) {
         this.mainApp = mainApp;
-        setLayout(new GridBagLayout()); // Center Layout
+        setLayout(new GridBagLayout());
         setBackground(Theme.BG_COLOR);
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -34,7 +34,6 @@ public class MainMenuPanel extends JPanel {
         gbc.gridx = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // --- JUDUL BESAR ---
         JLabel titleLabel = new JLabel("ONEX", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 50));
         titleLabel.setForeground(Theme.PRIMARY_COLOR);
@@ -48,7 +47,6 @@ public class MainMenuPanel extends JPanel {
         gbc.insets = new Insets(0, 0, 30, 0);
         add(welcomeLabel, gbc);
 
-        // --- PILIHAN TEMA ---
         JPanel themePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         themePanel.setOpaque(false);
 
@@ -68,13 +66,12 @@ public class MainMenuPanel extends JPanel {
         gbc.insets = new Insets(0, 0, 20, 0);
         add(themePanel, gbc);
 
-        // --- TOMBOL-TOMBOL ---
-        gbc.insets = new Insets(8, 0, 8, 0); // Reset jarak
+        gbc.insets = new Insets(8, 0, 8, 0);
 
         JButton btnStart = createModernButton("START GAME", Theme.PRIMARY_COLOR);
         btnStart.addActionListener(e -> {
             String selectedTheme = (String) themeComboBox.getSelectedItem();
-            Theme.setCurrentTheme(selectedTheme); // Jika ada logika ini di Theme
+            Theme.setCurrentTheme(selectedTheme);
             mainApp.showPanel("LEVEL_SELECT");
         });
         gbc.gridy = 3;
@@ -100,7 +97,6 @@ public class MainMenuPanel extends JPanel {
         welcomeLabel.setText("Welcome, " + username + "!");
     }
 
-    // --- HELPER: MEMBUAT TOMBOL MODERN (TANPA FILE BARU) ---
     private JButton createModernButton(String text, Color baseColor) {
         JButton btn = new JButton(text) {
             @Override
@@ -108,14 +104,12 @@ public class MainMenuPanel extends JPanel {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-                // Efek Hover sederhana
                 if (getModel().isRollover()) {
                     g2.setColor(baseColor.brighter());
                 } else {
                     g2.setColor(baseColor);
                 }
 
-                // Gambar Rounded Rect
                 g2.fill(new RoundRectangle2D.Float(0, 0, getWidth(), getHeight(), 20, 20));
                 g2.dispose();
 
