@@ -16,6 +16,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 
 public class GameOverPanel extends JPanel {
     private MainFrame mainApp;
@@ -32,56 +33,72 @@ public class GameOverPanel extends JPanel {
     }
 
     private void setupUI() {
+        JPanel cardPanel = new JPanel(new GridBagLayout()) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g;
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(Theme.PANEL_COLOR);
+                // Gambar kotak rounded
+                g2.fill(new RoundRectangle2D.Float(0, 0, getWidth(), getHeight(), 30, 30));
+            }
+        };
+        cardPanel.setOpaque(false);
+        cardPanel.setBorder(new EmptyBorder(40, 60, 40, 60));
+
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 0, 10, 0);
         gbc.gridx = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.CENTER;
 
         titleLabel = new JLabel("GAME OVER", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 48));
         titleLabel.setForeground(Theme.ACCENT_COLOR);
         gbc.gridy = 0;
-        gbc.insets = new Insets(0, 0, 30, 0);
-        add(titleLabel, gbc);
+        gbc.insets = new Insets(0, 0, 30, 0); // Jarak bawah judul
+        cardPanel.add(titleLabel, gbc);
 
         scoreLabel = new JLabel("Score: 0", SwingConstants.CENTER);
         scoreLabel.setFont(Theme.HEADER_FONT);
         scoreLabel.setForeground(Theme.TEXT_WHITE);
         gbc.gridy = 1;
-        gbc.insets = new Insets(5, 0, 5, 0);
-        add(scoreLabel, gbc);
+        gbc.insets = new Insets(0, 0, 10, 0);
+        cardPanel.add(scoreLabel, gbc);
 
         timeLabel = new JLabel("Time: 0s", SwingConstants.CENTER);
         timeLabel.setFont(Theme.SUBHEADER_FONT);
         timeLabel.setForeground(Theme.TEXT_GRAY);
         gbc.gridy = 2;
-        add(timeLabel, gbc);
+        gbc.insets = new Insets(0, 0, 5, 0);
+        cardPanel.add(timeLabel, gbc);
 
         infoLabel = new JLabel("Difficulty: Easy", SwingConstants.CENTER);
         infoLabel.setFont(Theme.NORMAL_FONT);
         infoLabel.setForeground(Theme.TEXT_GRAY);
         gbc.gridy = 3;
         gbc.insets = new Insets(0, 0, 40, 0);
-        add(infoLabel, gbc);
+        cardPanel.add(infoLabel, gbc);
 
         JButton btnMenu = createModernButton("BACK TO MENU", Theme.SECONDARY_COLOR);
         btnMenu.addActionListener(e -> mainApp.showPanel("MENU"));
         gbc.gridy = 4;
-        gbc.insets = new Insets(10, 0, 10, 0);
-        add(btnMenu, gbc);
+        gbc.insets = new Insets(0, 0, 0, 0);
+        cardPanel.add(btnMenu, gbc);
+
+        add(cardPanel);
     }
 
     public void setResults(boolean isWin, int score, int duration, String difficulty) {
         if (isWin) {
             titleLabel.setText("YOU WIN!");
-            titleLabel.setForeground(Theme.PRIMARY_COLOR);
+            titleLabel.setForeground(Theme.PRIMARY_COLOR); // Biru/Hijau Neon
         } else {
             titleLabel.setText("GAME OVER");
-            titleLabel.setForeground(Theme.ACCENT_COLOR);
+            titleLabel.setForeground(Theme.ACCENT_COLOR); // Merah Neon
         }
 
         scoreLabel.setText("Final Score: " + score);
-        timeLabel.setText("Duration: " + duration + "s");
+        timeLabel.setText("Time Spent: " + duration + "s");
         infoLabel.setText("Difficulty: " + difficulty);
     }
 
@@ -91,12 +108,19 @@ public class GameOverPanel extends JPanel {
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(getModel().isRollover() ? baseColor.brighter() : baseColor);
+
+                if (getModel().isRollover()) {
+                    g2.setColor(baseColor.brighter());
+                } else {
+                    g2.setColor(baseColor);
+                }
+
                 g2.fill(new RoundRectangle2D.Float(0, 0, getWidth(), getHeight(), 20, 20));
                 g2.dispose();
                 super.paintComponent(g);
             }
         };
+
         btn.setFont(Theme.SUBHEADER_FONT);
         btn.setForeground(Color.WHITE);
         btn.setFocusPainted(false);

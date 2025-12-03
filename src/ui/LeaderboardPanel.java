@@ -1,7 +1,9 @@
 package ui;
 
+import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -27,23 +29,26 @@ import javax.swing.table.JTableHeader;
 import db.DatabaseManager;
 
 public class LeaderboardPanel extends JPanel {
-    private MainFrame mainApp;
+    private MainFrame mainApp; // Variabel ini sekarang akan terpakai
     private JTable tableLeaderboard;
     private DefaultTableModel model;
 
     public LeaderboardPanel(MainFrame mainApp) {
-        this.mainApp = mainApp;
+        this.mainApp = mainApp; // Assign nilai ke variabel class
+
         setLayout(new BorderLayout());
         setBackground(Theme.BG_COLOR);
-        setBorder(new EmptyBorder(20, 40, 20, 40));
+        setBorder(new EmptyBorder(40, 60, 40, 60));
 
+        // Judul
         JLabel title = new JLabel("TOP 10 PLAYERS", SwingConstants.CENTER);
-        title.setFont(new Font("Segoe UI", Font.BOLD, 36));
+        title.setFont(new Font("Segoe UI", Font.BOLD, 42));
         title.setForeground(Theme.PRIMARY_COLOR);
-        title.setBorder(new EmptyBorder(0, 0, 20, 0)); // Jarak ke tabel
+        title.setBorder(new EmptyBorder(0, 0, 30, 0));
         add(title, BorderLayout.NORTH);
 
-        model = new DefaultTableModel(new String[] { "Username", "Score", "Duration" }, 0) {
+        // Model Tabel
+        model = new DefaultTableModel(new String[] { "#", "USERNAME", "SCORE", "DURATION" }, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -53,43 +58,107 @@ public class LeaderboardPanel extends JPanel {
         tableLeaderboard = new JTable(model);
         styleTable(tableLeaderboard);
 
-        JScrollPane scrollPane = new JScrollPane(tableLeaderboard);
-        scrollPane.getViewport().setBackground(Theme.BG_COLOR);
+        // ScrollPane Custom
+        JScrollPane scrollPane = new JScrollPane(tableLeaderboard) {
+            @Override
+            public void paint(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                RoundRectangle2D.Float round = new RoundRectangle2D.Float(0, 0, getWidth(), getHeight(), 25, 25);
+                g2.setClip(round);
+                super.paint(g2);
+
+                g2.setClip(null);
+                g2.setColor(Theme.SECONDARY_COLOR);
+                g2.setStroke(new BasicStroke(2));
+                g2.draw(round);
+
+                g2.dispose();
+            }
+        };
+
+        scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(0, 0));
+        scrollPane.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 0));
+        scrollPane.getViewport().setBackground(Theme.PANEL_COLOR);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
-        scrollPane.setBackground(Theme.BG_COLOR);
+        scrollPane.setOpaque(false);
         add(scrollPane, BorderLayout.CENTER);
 
+        // Tombol Kembali
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.setBackground(Theme.BG_COLOR);
-        buttonPanel.setBorder(new EmptyBorder(20, 0, 0, 0));
+        buttonPanel.setBorder(new EmptyBorder(30, 0, 0, 0));
 
         JButton backBtn = createModernButton("BACK TO MENU", Theme.SECONDARY_COLOR);
-        backBtn.addActionListener(e -> mainApp.showPanel("MENU"));
+
+        // PERBAIKAN DI SINI: Gunakan 'this.mainApp'
+        backBtn.addActionListener(e -> this.mainApp.showPanel("MENU"));
 
         buttonPanel.add(backBtn);
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
     private void styleTable(JTable table) {
+        table.setFillsViewportHeight(true);
         table.setBackground(Theme.PANEL_COLOR);
         table.setForeground(Theme.TEXT_WHITE);
         table.setFont(Theme.NORMAL_FONT);
-        table.setRowHeight(35);
+        table.setRowHeight(45);
         table.setShowGrid(false);
         table.setIntercellSpacing(new Dimension(0, 0));
-        table.setFillsViewportHeight(true);
+        table.setFocusable(false);
+        table.setRowSelectionAllowed(false);
+
+        table.getColumnModel().getColumn(0).setPreferredWidth(50);
+        table.getColumnModel().getColumn(0).setMaxWidth(60);
+        table.getColumnModel().getColumn(0).setMinWidth(40);
 
         JTableHeader header = table.getTableHeader();
-        header.setBackground(Theme.TILE_BG);
-        header.setForeground(Color.WHITE);
-        header.setFont(Theme.SUBHEADER_FONT);
-        header.setBorder(BorderFactory.createEmptyBorder());
-        header.setPreferredSize(new Dimension(0, 40));
+        header.setDefaultRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
+                JLabel lbl = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
+                        column);
+                lbl.setBackground(Theme.TILE_BG);
+                lbl.setForeground(Theme.PRIMARY_COLOR);
+                lbl.setFont(Theme.SUBHEADER_FONT);
+                lbl.setHorizontalAlignment(CENTER);
+                lbl.setBorder(new EmptyBorder(15, 10, 15, 10));
+                return lbl;
+            }
+        });
+        header.setPreferredSize(new Dimension(0, 60));
 
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        centerRenderer.setBackground(Theme.PANEL_COLOR);
-        centerRenderer.setForeground(Theme.TEXT_WHITE);
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                ((JLabel) c).setHorizontalAlignment(CENTER);
+                setBorder(new EmptyBorder(0, 10, 0, 10));
+
+                if (row % 2 == 0)
+                    c.setBackground(Theme.PANEL_COLOR);
+                else
+                    c.setBackground(new Color(35, 48, 68));
+
+                if (column == 0) {
+                    if (row == 0)
+                        c.setForeground(new Color(255, 215, 0));
+                    else if (row == 1)
+                        c.setForeground(new Color(192, 192, 192));
+                    else if (row == 2)
+                        c.setForeground(new Color(205, 127, 50));
+                    else
+                        c.setForeground(Theme.TEXT_GRAY);
+                } else {
+                    c.setForeground(Theme.TEXT_WHITE);
+                }
+                return c;
+            }
+        };
 
         for (int i = 0; i < table.getColumnCount(); i++) {
             table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
@@ -102,19 +171,15 @@ public class LeaderboardPanel extends JPanel {
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-                if (getModel().isRollover()) {
+                if (getModel().isRollover())
                     g2.setColor(baseColor.brighter());
-                } else {
+                else
                     g2.setColor(baseColor);
-                }
-
                 g2.fill(new RoundRectangle2D.Float(0, 0, getWidth(), getHeight(), 20, 20));
                 g2.dispose();
                 super.paintComponent(g);
             }
         };
-
         btn.setFont(Theme.SUBHEADER_FONT);
         btn.setForeground(Color.WHITE);
         btn.setFocusPainted(false);
@@ -128,8 +193,11 @@ public class LeaderboardPanel extends JPanel {
     public void onPanelShown() {
         model.setRowCount(0);
         List<Object[]> data = DatabaseManager.getLeaderboard();
+        int rank = 1;
         for (Object[] row : data) {
-            model.addRow(row);
+            model.addRow(new Object[] {
+                    rank++, row[0], row[1], row[2]
+            });
         }
     }
 }

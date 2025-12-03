@@ -61,6 +61,7 @@ public class MainFrame extends JFrame {
             leaderboardPanel.onPanelShown();
         if (name.equals("HISTORY"))
             historyPanel.onPanelShown();
+
         cardLayout.show(container, name);
     }
 
@@ -105,10 +106,15 @@ public class MainFrame extends JFrame {
         return currentUserId;
     }
 
+    public String getCurrentUsername() {
+        return currentUsername;
+    }
+
     public static void main(String[] args) {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
+            System.err.println("MySQL Driver not found!");
         }
         SwingUtilities.invokeLater(() -> new MainFrame().setVisible(true));
     }

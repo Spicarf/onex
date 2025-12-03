@@ -502,7 +502,9 @@ public class GamePanel extends JPanel {
 
     private void updateInfo() {
         String levelName = (currentDifficulty == 1) ? "EASY" : (currentDifficulty == 2) ? "MEDIUM" : "HARD";
-        infoLabel.setText("Level: " + levelName + " | Time: " + timeLeft + " | Score: " + score);
+        String player = (mainApp.getCurrentUsername() != null) ? mainApp.getCurrentUsername() : "Guest";
+        infoLabel.setText(
+                "Player: " + player + " | Level: " + levelName + " | Time: " + timeLeft + " | Score: " + score);
     }
 
     private boolean isBoardEmpty() {

@@ -1,7 +1,9 @@
 package ui;
 
+import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -35,15 +37,18 @@ public class HistoryPanel extends JPanel {
         this.mainApp = mainApp;
         setLayout(new BorderLayout());
         setBackground(Theme.BG_COLOR);
-        setBorder(new EmptyBorder(20, 40, 20, 40)); // Padding pinggir
+        setBorder(new EmptyBorder(40, 60, 40, 60)); // Padding pinggir
 
+        // --- JUDUL ---
         JLabel title = new JLabel("MY HISTORY", SwingConstants.CENTER);
-        title.setFont(new Font("Segoe UI", Font.BOLD, 36));
+        title.setFont(new Font("Segoe UI", Font.BOLD, 42));
         title.setForeground(Theme.PRIMARY_COLOR);
-        title.setBorder(new EmptyBorder(0, 0, 20, 0)); // Jarak ke tabel
+        title.setBorder(new EmptyBorder(0, 0, 30, 0)); // Jarak ke tabel
         add(title, BorderLayout.NORTH);
 
-        model = new DefaultTableModel(new String[] { "Score", "Duration", "Date" }, 0) {
+        // --- TABEL MODERN ---
+        // Kolom: Score, Duration, Date
+        model = new DefaultTableModel(new String[] { "SCORE", "DURATION", "DATE" }, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -53,15 +58,41 @@ public class HistoryPanel extends JPanel {
         tableHistory = new JTable(model);
         styleTable(tableHistory);
 
-        JScrollPane scrollPane = new JScrollPane(tableHistory);
-        scrollPane.getViewport().setBackground(Theme.BG_COLOR);
+        // --- SCROLLPANE CUSTOM (Rounded) ---
+        JScrollPane scrollPane = new JScrollPane(tableHistory) {
+            @Override
+            public void paint(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                // Rounded Clip
+                RoundRectangle2D.Float round = new RoundRectangle2D.Float(0, 0, getWidth(), getHeight(), 25, 25);
+                g2.setClip(round);
+                super.paint(g2);
+
+                // Border
+                g2.setClip(null);
+                g2.setColor(Theme.SECONDARY_COLOR);
+                g2.setStroke(new BasicStroke(2));
+                g2.draw(round);
+
+                g2.dispose();
+            }
+        };
+
+        // Hide Scrollbars
+        scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(0, 0));
+        scrollPane.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 0));
+
+        scrollPane.getViewport().setBackground(Theme.PANEL_COLOR);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
-        scrollPane.setBackground(Theme.BG_COLOR);
+        scrollPane.setOpaque(false);
         add(scrollPane, BorderLayout.CENTER);
 
+        // --- TOMBOL KEMBALI ---
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.setBackground(Theme.BG_COLOR);
-        buttonPanel.setBorder(new EmptyBorder(20, 0, 0, 0));
+        buttonPanel.setBorder(new EmptyBorder(30, 0, 0, 0));
 
         JButton backBtn = createModernButton("BACK TO MENU", Theme.SECONDARY_COLOR);
         backBtn.addActionListener(e -> mainApp.showPanel("MENU"));
@@ -70,45 +101,72 @@ public class HistoryPanel extends JPanel {
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
+    // --- HELPER: STYLING TABEL ---
     private void styleTable(JTable table) {
+        table.setFillsViewportHeight(true);
         table.setBackground(Theme.PANEL_COLOR);
         table.setForeground(Theme.TEXT_WHITE);
         table.setFont(Theme.NORMAL_FONT);
-        table.setRowHeight(35);
+        table.setRowHeight(45);
         table.setShowGrid(false);
         table.setIntercellSpacing(new Dimension(0, 0));
-        table.setFillsViewportHeight(true);
+        table.setFocusable(false);
+        table.setRowSelectionAllowed(false);
 
+        // HEADER
         JTableHeader header = table.getTableHeader();
-        header.setBackground(Theme.TILE_BG);
-        header.setForeground(Color.WHITE);
-        header.setFont(Theme.SUBHEADER_FONT);
-        header.setBorder(BorderFactory.createEmptyBorder());
-        header.setPreferredSize(new Dimension(0, 40));
+        header.setDefaultRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
+                JLabel lbl = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
+                        column);
+                lbl.setBackground(Theme.TILE_BG);
+                lbl.setForeground(Theme.PRIMARY_COLOR);
+                lbl.setFont(Theme.SUBHEADER_FONT);
+                lbl.setHorizontalAlignment(CENTER);
+                lbl.setBorder(new EmptyBorder(15, 10, 15, 10));
+                return lbl;
+            }
+        });
+        header.setPreferredSize(new Dimension(0, 60));
 
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        centerRenderer.setBackground(Theme.PANEL_COLOR);
-        centerRenderer.setForeground(Theme.TEXT_WHITE);
+        // BODY & ZEBRA STRIPING
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                ((JLabel) c).setHorizontalAlignment(CENTER);
+                setBorder(new EmptyBorder(0, 10, 0, 10));
+
+                // Zebra
+                if (row % 2 == 0) {
+                    c.setBackground(Theme.PANEL_COLOR);
+                } else {
+                    c.setBackground(new Color(35, 48, 68));
+                }
+                c.setForeground(Theme.TEXT_WHITE);
+                return c;
+            }
+        };
 
         for (int i = 0; i < table.getColumnCount(); i++) {
             table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
     }
 
+    // --- HELPER: TOMBOL MODERN ---
     private JButton createModernButton(String text, Color baseColor) {
         JButton btn = new JButton(text) {
             @Override
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-                if (getModel().isRollover()) {
+                if (getModel().isRollover())
                     g2.setColor(baseColor.brighter());
-                } else {
+                else
                     g2.setColor(baseColor);
-                }
-
                 g2.fill(new RoundRectangle2D.Float(0, 0, getWidth(), getHeight(), 20, 20));
                 g2.dispose();
                 super.paintComponent(g);
