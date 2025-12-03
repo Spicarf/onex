@@ -11,7 +11,7 @@ import java.util.Map;
 import javax.swing.ImageIcon;
 
 public class Theme {
-    // --- WARNA MODERN (Flat Dark UI) ---
+    // --- WARNA MODERN (Flat Dark) ---
     public static final Color BG_COLOR = new Color(15, 23, 42);
     public static final Color PANEL_COLOR = new Color(30, 41, 59);
     public static final Color PRIMARY_COLOR = new Color(56, 189, 248);

@@ -1,4 +1,4 @@
-package ui;
+package ui;//
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -41,7 +41,7 @@ public class RegisterPanel extends JPanel {
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g;
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(Theme.PANEL_COLOR); // Warna Abu-abu Card
+                g2.setColor(Theme.PANEL_COLOR);
                 g2.fill(new RoundRectangle2D.Float(0, 0, getWidth(), getHeight(), 30, 30));
             }
         };
