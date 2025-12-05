@@ -1,4 +1,4 @@
-package ui;//
+package ui;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -14,30 +14,31 @@ import java.awt.geom.RoundRectangle2D;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-public class LevelSelectionPanel extends JPanel {
+public class LevelSelectionPanel extends BasePanel {
     private MainFrame mainApp;
 
     public LevelSelectionPanel(MainFrame mainApp) {
+        super();
         this.mainApp = mainApp;
         setLayout(new GridBagLayout());
         setBackground(Theme.BG_COLOR);
         setupUI();
     }
 
-    private void setupUI() {
+    @Override
+    public void setupUI() {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 0, 10, 0);
         gbc.gridx = 0;
         gbc.fill = GridBagConstraints.NONE;
 
         JLabel title = new JLabel("SELECT DIFFICULTY", SwingConstants.CENTER);
-        title.setFont(new Font("Segoe UI", Font.BOLD, 36)); // Font Besar
+        title.setFont(new Font("Segoe UI", Font.BOLD, 36));
         title.setForeground(Theme.TEXT_WHITE);
         gbc.gridy = 0;
-        gbc.insets = new Insets(0, 0, 30, 0); // Jarak agak jauh ke tombol pertama
+        gbc.insets = new Insets(0, 0, 30, 0);
         add(title, gbc);
 
         gbc.insets = new Insets(10, 0, 10, 0);
@@ -71,7 +72,6 @@ public class LevelSelectionPanel extends JPanel {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-                // Efek Hover
                 if (getModel().isRollover()) {
                     g2.setColor(baseColor.brighter());
                 } else {

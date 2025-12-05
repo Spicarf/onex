@@ -1,4 +1,4 @@
-package ui;//
+package ui;
 
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
@@ -40,7 +40,7 @@ import game.GameEndType;
 import game.PathFinder;
 import game.Tile;
 
-public class GamePanel extends JPanel {
+public class GamePanel extends BasePanel {
     private MainFrame mainApp;
     private JPanel boardPanel;
     private Board board;
@@ -62,8 +62,26 @@ public class GamePanel extends JPanel {
     private Clip bgmClip;
 
     public GamePanel(MainFrame mainApp) {
+        super();
         this.mainApp = mainApp;
-        setLayout(new BorderLayout());
+
+        gameTimer = new Timer(1000, (ActionEvent e) -> {
+            if (timeLeft > 0) {
+                timeLeft--;
+                updateInfo();
+            } else {
+                stopGame(GameEndType.TIME_UP);
+            }
+        });
+
+        pathClearTimer = new Timer(300, e -> clearPathAndRemoveTiles());
+        pathClearTimer.setRepeats(false);
+
+        setupUI();
+    }
+
+    @Override
+    public void setupUI() {
         setBackground(Theme.BG_COLOR);
 
         JPanel topPanel = new JPanel(new BorderLayout());
@@ -124,18 +142,6 @@ public class GamePanel extends JPanel {
         boardPanel.setBackground(Theme.BG_COLOR);
         boardPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         add(boardPanel, BorderLayout.CENTER);
-
-        gameTimer = new Timer(1000, (ActionEvent e) -> {
-            if (timeLeft > 0) {
-                timeLeft--;
-                updateInfo();
-            } else {
-                stopGame(GameEndType.TIME_UP);
-            }
-        });
-
-        pathClearTimer = new Timer(300, e -> clearPathAndRemoveTiles());
-        pathClearTimer.setRepeats(false);
     }
 
     private void styleButton(JButton btn) {

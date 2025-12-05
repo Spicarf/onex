@@ -1,4 +1,4 @@
-package ui;//
+package ui;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -18,7 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-public class GameOverPanel extends JPanel {
+public class GameOverPanel extends BasePanel {
     private MainFrame mainApp;
     private JLabel titleLabel;
     private JLabel scoreLabel;
@@ -26,20 +26,21 @@ public class GameOverPanel extends JPanel {
     private JLabel infoLabel;
 
     public GameOverPanel(MainFrame mainApp) {
+        super();
         this.mainApp = mainApp;
         setLayout(new GridBagLayout());
         setBackground(Theme.BG_COLOR);
         setupUI();
     }
 
-    private void setupUI() {
+    @Override
+    public void setupUI() {
         JPanel cardPanel = new JPanel(new GridBagLayout()) {
             @Override
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g;
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 g2.setColor(Theme.PANEL_COLOR);
-                // Gambar kotak rounded
                 g2.fill(new RoundRectangle2D.Float(0, 0, getWidth(), getHeight(), 30, 30));
             }
         };
@@ -55,7 +56,7 @@ public class GameOverPanel extends JPanel {
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 48));
         titleLabel.setForeground(Theme.ACCENT_COLOR);
         gbc.gridy = 0;
-        gbc.insets = new Insets(0, 0, 30, 0); // Jarak bawah judul
+        gbc.insets = new Insets(0, 0, 30, 0);
         cardPanel.add(titleLabel, gbc);
 
         scoreLabel = new JLabel("Score: 0", SwingConstants.CENTER);
@@ -91,10 +92,10 @@ public class GameOverPanel extends JPanel {
     public void setResults(boolean isWin, int score, int duration, String difficulty) {
         if (isWin) {
             titleLabel.setText("YOU WIN!");
-            titleLabel.setForeground(Theme.PRIMARY_COLOR); // Biru/Hijau Neon
+            titleLabel.setForeground(Theme.PRIMARY_COLOR);
         } else {
             titleLabel.setText("GAME OVER");
-            titleLabel.setForeground(Theme.ACCENT_COLOR); // Merah Neon
+            titleLabel.setForeground(Theme.ACCENT_COLOR);
         }
 
         scoreLabel.setText("Final Score: " + score);

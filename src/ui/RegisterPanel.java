@@ -1,4 +1,4 @@
-package ui;//
+package ui;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -22,20 +22,24 @@ import javax.swing.border.EmptyBorder;
 
 import db.DatabaseManager;
 
-public class RegisterPanel extends JPanel {
+public class RegisterPanel extends BasePanel {
     private MainFrame mainApp;
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JPasswordField confirmField;
 
     public RegisterPanel(MainFrame mainApp) {
+        super();
         this.mainApp = mainApp;
+
         setLayout(new GridBagLayout());
         setBackground(Theme.BG_COLOR);
+
         setupUI();
     }
 
-    private void setupUI() {
+    @Override
+    public void setupUI() {
         JPanel cardPanel = new JPanel(new GridBagLayout()) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -81,7 +85,7 @@ public class RegisterPanel extends JPanel {
         cardPanel.add(confirmField, gbc);
 
         gbc.gridy = 7;
-        gbc.insets = new Insets(30, 0, 10, 0); // Jarak lebih jauh ke atas
+        gbc.insets = new Insets(30, 0, 10, 0);
         JButton btnReg = createModernButton("CREATE ACCOUNT", Theme.PRIMARY_COLOR);
         btnReg.addActionListener(e -> processRegister());
         cardPanel.add(btnReg, gbc);

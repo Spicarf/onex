@@ -1,4 +1,4 @@
-package ui;//
+package ui;
 
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
@@ -28,26 +28,28 @@ import javax.swing.table.JTableHeader;
 
 import db.DatabaseManager;
 
-public class HistoryPanel extends JPanel {
+public class HistoryPanel extends BasePanel {
     private MainFrame mainApp;
     private JTable tableHistory;
     private DefaultTableModel model;
 
     public HistoryPanel(MainFrame mainApp) {
+        super();
         this.mainApp = mainApp;
         setLayout(new BorderLayout());
         setBackground(Theme.BG_COLOR);
-        setBorder(new EmptyBorder(40, 60, 40, 60)); // Padding pinggir
+        setBorder(new EmptyBorder(40, 60, 40, 60));
+        setupUI();
+    }
 
-        // --- JUDUL ---
+    @Override
+    public void setupUI() {
         JLabel title = new JLabel("MY HISTORY", SwingConstants.CENTER);
         title.setFont(new Font("Segoe UI", Font.BOLD, 42));
         title.setForeground(Theme.PRIMARY_COLOR);
-        title.setBorder(new EmptyBorder(0, 0, 30, 0)); // Jarak ke tabel
+        title.setBorder(new EmptyBorder(0, 0, 30, 0));
         add(title, BorderLayout.NORTH);
 
-        // --- TABEL MODERN ---
-        // Kolom: Score, Duration, Date
         model = new DefaultTableModel(new String[] { "SCORE", "DURATION", "DATE" }, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -58,19 +60,16 @@ public class HistoryPanel extends JPanel {
         tableHistory = new JTable(model);
         styleTable(tableHistory);
 
-        // --- SCROLLPANE CUSTOM (Rounded) ---
         JScrollPane scrollPane = new JScrollPane(tableHistory) {
             @Override
             public void paint(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-                // Rounded Clip
                 RoundRectangle2D.Float round = new RoundRectangle2D.Float(0, 0, getWidth(), getHeight(), 25, 25);
                 g2.setClip(round);
                 super.paint(g2);
 
-                // Border
                 g2.setClip(null);
                 g2.setColor(Theme.SECONDARY_COLOR);
                 g2.setStroke(new BasicStroke(2));
@@ -80,7 +79,6 @@ public class HistoryPanel extends JPanel {
             }
         };
 
-        // Hide Scrollbars
         scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(0, 0));
         scrollPane.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 0));
 
@@ -89,7 +87,6 @@ public class HistoryPanel extends JPanel {
         scrollPane.setOpaque(false);
         add(scrollPane, BorderLayout.CENTER);
 
-        // --- TOMBOL KEMBALI ---
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.setBackground(Theme.BG_COLOR);
         buttonPanel.setBorder(new EmptyBorder(30, 0, 0, 0));
@@ -101,7 +98,6 @@ public class HistoryPanel extends JPanel {
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
-    // --- HELPER: STYLING TABEL ---
     private void styleTable(JTable table) {
         table.setFillsViewportHeight(true);
         table.setBackground(Theme.PANEL_COLOR);
@@ -113,7 +109,6 @@ public class HistoryPanel extends JPanel {
         table.setFocusable(false);
         table.setRowSelectionAllowed(false);
 
-        // HEADER
         JTableHeader header = table.getTableHeader();
         header.setDefaultRenderer(new DefaultTableCellRenderer() {
             @Override
@@ -131,7 +126,6 @@ public class HistoryPanel extends JPanel {
         });
         header.setPreferredSize(new Dimension(0, 60));
 
-        // BODY & ZEBRA STRIPING
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
@@ -140,7 +134,6 @@ public class HistoryPanel extends JPanel {
                 ((JLabel) c).setHorizontalAlignment(CENTER);
                 setBorder(new EmptyBorder(0, 10, 0, 10));
 
-                // Zebra
                 if (row % 2 == 0) {
                     c.setBackground(Theme.PANEL_COLOR);
                 } else {
@@ -156,7 +149,6 @@ public class HistoryPanel extends JPanel {
         }
     }
 
-    // --- HELPER: TOMBOL MODERN ---
     private JButton createModernButton(String text, Color baseColor) {
         JButton btn = new JButton(text) {
             @Override

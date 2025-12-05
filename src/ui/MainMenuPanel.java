@@ -1,4 +1,4 @@
-package ui;//
+package ui;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -26,7 +26,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-public class MainMenuPanel extends JPanel {
+public class MainMenuPanel extends BasePanel {
     private MainFrame mainApp;
     private JLabel welcomeLabel;
 
@@ -34,11 +34,15 @@ public class MainMenuPanel extends JPanel {
     private String selectedThemeName = "Numbers";
 
     public MainMenuPanel(MainFrame mainApp) {
+        super();
         this.mainApp = mainApp;
-
         setLayout(new GridBagLayout());
         setBackground(Theme.BG_COLOR);
+        setupUI();
+    }
 
+    @Override
+    public void setupUI() {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 0, 10, 0);
         gbc.gridx = 0;

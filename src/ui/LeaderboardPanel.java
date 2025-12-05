@@ -1,4 +1,4 @@
-package ui;//
+package ui;
 
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
@@ -28,26 +28,30 @@ import javax.swing.table.JTableHeader;
 
 import db.DatabaseManager;
 
-public class LeaderboardPanel extends JPanel {
-    private MainFrame mainApp; // Variabel ini sekarang akan terpakai
+public class LeaderboardPanel extends BasePanel {
+    private MainFrame mainApp;
     private JTable tableLeaderboard;
     private DefaultTableModel model;
 
     public LeaderboardPanel(MainFrame mainApp) {
-        this.mainApp = mainApp; // Assign nilai ke variabel class
+        super();
+        this.mainApp = mainApp;
 
         setLayout(new BorderLayout());
         setBackground(Theme.BG_COLOR);
         setBorder(new EmptyBorder(40, 60, 40, 60));
 
-        // Judul
+        setupUI();
+    }
+
+    @Override
+    public void setupUI() {
         JLabel title = new JLabel("TOP 10 PLAYERS", SwingConstants.CENTER);
         title.setFont(new Font("Segoe UI", Font.BOLD, 42));
         title.setForeground(Theme.PRIMARY_COLOR);
         title.setBorder(new EmptyBorder(0, 0, 30, 0));
         add(title, BorderLayout.NORTH);
 
-        // Model Tabel
         model = new DefaultTableModel(new String[] { "#", "USERNAME", "SCORE", "DURATION" }, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -58,7 +62,6 @@ public class LeaderboardPanel extends JPanel {
         tableLeaderboard = new JTable(model);
         styleTable(tableLeaderboard);
 
-        // ScrollPane Custom
         JScrollPane scrollPane = new JScrollPane(tableLeaderboard) {
             @Override
             public void paint(Graphics g) {
@@ -85,14 +88,11 @@ public class LeaderboardPanel extends JPanel {
         scrollPane.setOpaque(false);
         add(scrollPane, BorderLayout.CENTER);
 
-        // Tombol Kembali
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.setBackground(Theme.BG_COLOR);
         buttonPanel.setBorder(new EmptyBorder(30, 0, 0, 0));
 
         JButton backBtn = createModernButton("BACK TO MENU", Theme.SECONDARY_COLOR);
-
-        // PERBAIKAN DI SINI: Gunakan 'this.mainApp'
         backBtn.addActionListener(e -> this.mainApp.showPanel("MENU"));
 
         buttonPanel.add(backBtn);

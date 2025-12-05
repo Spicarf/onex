@@ -1,4 +1,4 @@
-package ui;//
+package ui;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -22,19 +22,23 @@ import javax.swing.border.EmptyBorder;
 
 import db.DatabaseManager;
 
-public class LoginPanel extends JPanel {
+public class LoginPanel extends BasePanel {
     private MainFrame mainApp;
     private JTextField usernameField;
     private JPasswordField passwordField;
 
     public LoginPanel(MainFrame mainApp) {
+        super();
         this.mainApp = mainApp;
+
         setLayout(new GridBagLayout());
         setBackground(Theme.BG_COLOR);
+
         setupUI();
     }
 
-    private void setupUI() {
+    @Override
+    public void setupUI() {
         JPanel cardPanel = new JPanel(new GridBagLayout()) {
             @Override
             protected void paintComponent(Graphics g) {

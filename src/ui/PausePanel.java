@@ -1,4 +1,4 @@
-package ui;//
+package ui;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -14,20 +14,21 @@ import java.awt.geom.RoundRectangle2D;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-public class PausePanel extends JPanel {
+public class PausePanel extends BasePanel {
     private MainFrame mainApp;
 
     public PausePanel(MainFrame mainApp) {
+        super();
         this.mainApp = mainApp;
         setLayout(new GridBagLayout());
         setBackground(Theme.BG_COLOR);
         setupUI();
     }
 
-    private void setupUI() {
+    @Override
+    public void setupUI() {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(15, 0, 15, 0);
         gbc.gridx = 0;
